@@ -19,14 +19,14 @@ using namespace cv;
 
 
 
-void PlotHistogram(void *data)
+void PlotHistogram(Mat data)
 {
-    Mat *image = static_cast<Mat *>(data);
+    Mat image = data;
     Mat equalizeHistImage, b_hist, g_hist, r_hist;
     Mat grayImage;
     
      /// Convert to grayscale
-    cvtColor(*image, grayImage, COLOR_BGR2GRAY);
+    cvtColor(image, grayImage, COLOR_BGR2GRAY);
     if(grayImage.empty())
     {
         cout << "unable to convert to gray image" << endl;
@@ -35,7 +35,7 @@ void PlotHistogram(void *data)
     
     /// Separate the image in  3 Places (R, G, B)
     vector<Mat> rgbPlane;
-    split(*image, rgbPlane);
+    split(image, rgbPlane);
     
     /// Establish the number of bins
     int histSize = 256;
@@ -96,8 +96,126 @@ void PlotHistogram(void *data)
     imshow("Histogram Equalization", equalizeHistImage);
     
     waitKey(0);
+    
+    destroyAllWindows();
     return;
 }
 
 
+void LomographyEffect(Mat data)
+{
+    Mat image = (data);
+    Mat LomographyImage;
+    
+    const double E = exp(1.0);
+    
+    /// Create Lookup table for color curve effect
+    Mat LookUpTable(1, 256, CV_8UC1);
+    for (int i=0; i<256; i++)
+    {
+        float x= (float)i/256.0;
+        LookUpTable.at<uchar>(i)= cvRound( 256 * (1/(1 + pow(E, -((x-0.5)/0.1)) )) );
+    }
+    
+    /// Split the image channels and apply curve transform only to red channel
+    vector<Mat> bgr;
+    split(image, bgr);
+    LUT(bgr[2], LookUpTable, bgr[2]);
+    
+    /// merge result
+    merge(bgr, LomographyImage);
+    
+    /// Create image for halo dark
+    Mat halo( image.rows, image.cols, CV_32FC3, Scalar(0.3,0.3,0.3) );
+    
+    /// Create circle
+    circle(halo, Point(image.cols/2, image.rows/2), image.cols/3, Scalar(1,1,1), -1);
+    blur(halo, halo, Size(image.cols/3, image.cols/3));
+    
+    /// Convert the result to float to allow multiply by 1 factor
+    Mat resultf;
+    LomographyImage.convertTo(resultf, CV_32FC3);
+    
+    // Multiply our result with halo
+    multiply(resultf, halo, resultf);
+    
+    // convert to 8 bits
+    resultf.convertTo(LomographyImage, CV_8UC3);
+    
+    // show result
+    imshow("Lomograpy", LomographyImage);
+    waitKey(0);
+    
+    // Release mat memory
+    halo.release();
+    resultf.release();
+    LookUpTable.release();
+    bgr[0].release();
+    bgr[1].release();
+    bgr[2].release();
+    
+    destroyAllWindows();
+    
+    return;
+}
+
+void CartoonizeEffect(Mat data)
+{
+    Mat image = data;
+    
+    /* EDGES */
+    /// Apply median filter to remove possible noise
+    Mat imgMedian;
+    medianBlur(image, imgMedian, 7);
+    
+    /// Detect edges with canny
+    Mat imgCanny;
+    Canny(imgMedian, imgCanny, 50, 150);
+    
+    /// Dilate the edges
+    Mat kernel= getStructuringElement(MORPH_RECT, Size(2,2));
+    dilate(imgCanny, imgCanny, kernel);
+    
+    /// Scale edges values to 1 and invert values
+    imgCanny= imgCanny/255;
+    imgCanny= 1-imgCanny;
+    
+    /// Use float values to allow multiply between 0 and 1
+    Mat imgCannyf;
+    imgCanny.convertTo(imgCannyf, CV_32FC3);
+    
+    /// Blur the edgest to do smooth effect
+    blur(imgCannyf, imgCannyf, Size(5,5));
+    
+    /* COLOR **/
+    /// Apply bilateral filter to homogenizes color
+    Mat imgBF;
+    bilateralFilter(image, imgBF, 9, 150.0, 150.0);
+    
+    /// Truncate colors
+    Mat result= imgBF/25;
+    result= result*25;
+
+    /* MERGES COLOR + EDGES */
+    /// Create a 3 channles for edges
+    Mat imgCanny3c;
+    Mat cannyChannels[]={ imgCannyf, imgCannyf, imgCannyf};
+    merge(cannyChannels, 3, imgCanny3c);
+    
+    // Convert color result to float
+    Mat resultf;
+    result.convertTo(resultf, CV_32FC3);
+
+    // Multiply color and edges matrices
+    multiply(resultf, imgCanny3c, resultf);
+
+    // convert to 8 bits color
+    resultf.convertTo(result, CV_8UC3);
+
+    // Show image
+    imshow("Result", result);
+    waitKey(0);
+    
+    destroyAllWindows();
+}
 #endif /* __HistogramAndEffect_h */

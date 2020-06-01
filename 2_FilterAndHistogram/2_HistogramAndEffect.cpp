@@ -28,7 +28,31 @@ int main()
         return -1;
     }
     
-    PlotHistogram(&image);
-    
+    unsigned choice;
+    while(1)
+    {
+        cout << endl << "Choose the Effect to apply" << endl;
+        cout << "1. Plot Histogram" << endl << "2. Lomography Effect" << endl << "3. Catoonize Effect" << endl << "4. Exit" << endl << endl;
+        cout << "Enter the choice: - ";
+        cin >> choice;
+        
+        switch (choice)
+        {
+            case 1:
+                PlotHistogram(image);
+                break;
+            case 2:
+                LomographyEffect(image);
+                break;
+            case 3:
+                CartoonizeEffect(image);
+                break;
+            case 4:
+                return 0;
+            default:
+                cout << "Enter the correct choose" << endl;
+                break;
+        }
+    }    
     return 0;
 }
