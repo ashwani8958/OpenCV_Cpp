@@ -38,7 +38,8 @@ void show_histogram(std::string const& name, cv::Mat1b const& image)
     minMaxLoc(hist, 0, &max_val);
 
     // visualize each bin
-    for(int b = 0; b < bins; b++) {
+    for(int b = 0; b < bins; b++)
+    {
         float const binVal = hist.at<float>(b);
         int   const height = cvRound(binVal*hist_height/max_val);
         cv::line

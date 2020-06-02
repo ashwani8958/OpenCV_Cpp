@@ -117,9 +117,11 @@ void LomographyEffect(Mat data)
         LookUpTable.at<uchar>(i)= cvRound( 256 * (1/(1 + pow(E, -((x-0.5)/0.1)) )) );
     }
     
-    /// Split the image channels and apply curve transform only to red channel
+    /// Split the image channels
     vector<Mat> bgr;
     split(image, bgr);
+    
+    ///Apply curve transform only to red channel
     LUT(bgr[2], LookUpTable, bgr[2]);
     
     /// merge result
@@ -132,6 +134,8 @@ void LomographyEffect(Mat data)
     circle(halo, Point(image.cols/2, image.rows/2), image.cols/3, Scalar(1,1,1), -1);
     blur(halo, halo, Size(image.cols/3, image.cols/3));
     
+    
+    /// Have to convert our input image from an 8-bit image to a 32-bit float, because we need to multiply our blurred image, which has values in the 0 to 1 range, with our input image, which has integer values.
     /// Convert the result to float to allow multiply by 1 factor
     Mat resultf;
     LomographyImage.convertTo(resultf, CV_32FC3);
@@ -187,7 +191,7 @@ void CartoonizeEffect(Mat data)
     /// Blur the edgest to do smooth effect
     blur(imgCannyf, imgCannyf, Size(5,5));
     
-    /* COLOR **/
+    /* COLOR */
     /// Apply bilateral filter to homogenizes color
     Mat imgBF;
     bilateralFilter(image, imgBF, 9, 150.0, 150.0);
