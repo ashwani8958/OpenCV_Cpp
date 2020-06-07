@@ -45,11 +45,11 @@ void MultipleImageWindow::render()
     this->canvas.setTo( Scalar(20,20,20) );
     
     /// width and height of cell. add 10 px of padding between images
-    int cell_width= (canvas_width/cols);
-    int cell_height= (canvas_height/rows);
+    int cell_width = (canvas_width/cols);
+    int cell_height = (canvas_height/rows);
     
 //    int margin= 10;
-    int max_images=static_cast<int>((this->images.size()>cols*rows) ? cols*rows : this->images.size());
+    int max_images = static_cast<int>((this->images.size()>cols*rows) ? cols*rows : this->images.size());
     
     int i=0;
     vector<string>::iterator titles_it = this->titles.begin();

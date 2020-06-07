@@ -8,19 +8,7 @@
 
 #if 1
 
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <cmath>
-#include <memory>
-using namespace std;
-
-// OpenCV includes
-#include <opencv2/core/utility.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/highgui.hpp>
 #include "MultipleImageWindow.hpp"
-using namespace cv;
 
 shared_ptr<MultipleImageWindow> miw;
 

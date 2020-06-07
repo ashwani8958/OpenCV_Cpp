@@ -9,11 +9,15 @@
 #ifndef MultipleImageWindow_hpp
 #define MultipleImageWindow_hpp
 
-#include <string>
 #include <iostream>
+#include <string>
+#include <sstream>
+#include <cmath>
+#include <memory>
 using namespace std;
 
 // OpenCV includes
+#include <opencv2/core/utility.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 using namespace cv;
