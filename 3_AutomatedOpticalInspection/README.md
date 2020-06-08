@@ -7,7 +7,7 @@
 ## Pre Process
 a) Noise Removal.\
 b) Light Removal.\
-c) Binarization.
+c) Binarization.(threshold)
 
 ## Segmentation
 In the segmentation step, we are going to use two different algorithms\
