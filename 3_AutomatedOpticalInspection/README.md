@@ -10,6 +10,6 @@ b) Light Removal.\
 c) Binarization.
 
 ## Segmentation
-In the segmentation step, we are going to use two different algorithms:\ 
+In the segmentation step, we are going to use two different algorithms\
 a) Contour detection\
 b) Connected components extraction (labeling) 
