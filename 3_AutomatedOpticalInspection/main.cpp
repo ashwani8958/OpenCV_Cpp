@@ -14,13 +14,14 @@ shared_ptr<MultipleImageWindow> miw;
 
 // OpenCV command line parser functions
 // Keys accecpted by command line parser
+/// "@" before any variable means take the values supplied as the command line argument if "@" is not present than used the value which is given in between "||"
 const char* keys =
 {
-    "{help h usage ?    |   |       print this message}"
-    "{@image            |   |       Image to process}"
-    "{@lightPattern     |   |       Image light pattern to apply to image input}"
-    "{lightMethod       | 1 |       Method to remove backgroun light, 0 differenec, 1 div, 2 no light removal' }"
-    "{segMethod         | 1 |       Method to segment: 1 connected Components, 2 connectec components with stats, 3 find Contours }"
+    "{help h usage ?    |   |   print this message}"
+    "{@image            |   |   Image to process}"
+    "{@lightPattern     |   |   Image light pattern to apply to image input}"
+    "{@lightMethod      |   |   Method to remove backgroun light, 0 differenec, 1 div, 2 no light removal' }"
+    "{@segMethod        |   |   Method to segment: 1 connected Components, 2 connectec components with stats, 3 find Contours }"
 };
 
 static Scalar randomColor( RNG & rng )
@@ -68,7 +69,7 @@ void ConnectedComponents(Mat img)
     RNG rng( 0xFFFFFFFF );
     for(auto i=1; i<num_objects; i++)
     {
-        Mat mask= labels==i;
+        Mat mask = labels == i;
         output.setTo(randomColor(rng), mask);
     }
     
@@ -83,10 +84,13 @@ void ConnectedComponentsStats(Mat img)
     auto num_objects= connectedComponentsWithStats(img, labels, stats, centroids);
     
     /// Check the number of objects detected
-    if(num_objects < 2 ){
+    if(num_objects < 2 )
+    {
         cout << "No objects detected" << endl;
         return;
-    }else{
+    }
+    else
+    {
         cout << "Number of objects detected: " << num_objects - 1 << endl;
     }
     
@@ -181,8 +185,13 @@ int main( int argc, const char** argv )
     /// Get the value of each argument through command line parser
     String img_file = parser.get<String>(0);
     String light_pattern_file = parser.get<String>(1);
-    auto method_light = parser.get<int>("lightMethod");
-    auto method_seg = parser.get<int>("segMethod");
+    auto method_light = parser.get<int>(2);
+    auto method_seg = parser.get<int>(3);
+    
+    ///Use value that is given between "| |" line no. 23 and 24
+//    auto method_light = parser.get<int>("lightMethod");
+//    auto method_seg = parser.get<int>("segMethod");
+    
 
     // Check if params are correctly parsed in his variables
     if (!parser.check())
@@ -229,7 +238,9 @@ int main( int argc, const char** argv )
     if(method_light!=2)
     {
         threshold(img_no_light, img_thr, 30, 255, THRESH_BINARY);
-    }else{
+    }
+    else
+    {
         threshold(img_no_light, img_thr, 140, 255, THRESH_BINARY_INV);
     }
 
