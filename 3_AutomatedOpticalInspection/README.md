@@ -5,11 +5,11 @@
 ### 2. Segmentation
 
 ## Pre Process
-a) Noise Removal.
-b) Light Removal.
+a) Noise Removal.\
+b) Light Removal.\
 c) Binarization.
 
 ## Segmentation
 In the segmentation step, we are going to use two different algorithms: 
-a) Contour detection 
+a) Contour detection \
 b) Connected components extraction (labeling) 
