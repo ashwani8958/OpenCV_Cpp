@@ -53,6 +53,9 @@ void ConnectedComponents(Mat img)
     Mat labels;
     auto num_objects= connectedComponents(img, labels);
     
+    /// To print the content of labels
+//    cout << endl << labels.rowRange(0, labels.rows) << endl << endl;
+    
     /// Check the number of objects detected
     if(num_objects < 2 )
     {
@@ -64,7 +67,7 @@ void ConnectedComponents(Mat img)
         cout << "Number of objects detected: " << num_objects - 1 << endl;
     }
     
-    /// Create output image coloring the objects
+    /// Create output image coloring the objects and create a matrix initialized to zeros (which means that it will appear as black), specifying its height, width and its type
     Mat output= Mat::zeros(img.rows,img.cols, CV_8UC3);
     RNG rng( 0xFFFFFFFF );
     for(auto i=1; i<num_objects; i++)
@@ -94,7 +97,8 @@ void ConnectedComponentsStats(Mat img)
         cout << "Number of objects detected: " << num_objects - 1 << endl;
     }
     
-    /// Create output image coloring the objects and show area
+    // Create output image coloring the objects and show area
+    ///create a matrix initialized to zeros (which means that it will appear as black), specifying its height, width and its type
     Mat output= Mat::zeros(img.rows,img.cols, CV_8UC3);
     RNG rng( 0xFFFFFFFF );
     for(auto i=1; i<num_objects; i++)
@@ -110,7 +114,7 @@ void ConnectedComponentsStats(Mat img)
         putText(output, ss.str(), centroids.at<Point2d>(i), FONT_HERSHEY_SIMPLEX, 0.4, Scalar(255,255,255));
     }
     
-    imshow("Result", output);
+    //imshow("Result", output);
     miw->addImage("Result", output);
 }
 

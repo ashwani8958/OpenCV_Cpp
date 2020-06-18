@@ -42,7 +42,7 @@ void PlotHistogram(Mat data)
     
     /// Set the ranges ( for R,G,B)
     float range[] = { 0, 256 } ;
-    const float* histRange = { range };
+    const float* histRange =  range ;
     
     bool uniform = true;
     bool accumulate = false;
