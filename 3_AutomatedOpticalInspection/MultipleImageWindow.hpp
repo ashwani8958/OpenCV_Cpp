@@ -62,4 +62,5 @@ class MultipleImageWindow
         Mat canvas;
 };
 
+
 #endif /* MultipleImageWindow_hpp */

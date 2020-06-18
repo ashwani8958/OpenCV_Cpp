@@ -53,7 +53,7 @@ void ConnectedComponents(Mat img)
     Mat labels;
     auto num_objects= connectedComponents(img, labels);
     
-    /// To print the content of labels.
+    /// To print the content of labels
 //    cout << endl << labels.rowRange(0, labels.rows) << endl << endl;
     
     /// Check the number of objects detected
