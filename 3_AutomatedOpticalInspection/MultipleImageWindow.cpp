@@ -44,7 +44,7 @@ void MultipleImageWindow::render()
     /// Clean our canvas
     this->canvas.setTo( Scalar(20,20,20) );
     
-    /// width and height of cell. add 10 px of padding between images
+    /// width and height of cell. add 10 px of padding between images.
     int cell_width = (canvas_width/cols);
     int cell_height = (canvas_height/rows);
     
